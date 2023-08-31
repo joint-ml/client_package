@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "joint-ml"
+version = "0.1.0"
+description = ""
+authors = ["s.nikishonkov <s.nikishonkov@astondevs.ru>"]
+readme = "README.md"
+packages = [{include = "joint_ml"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
