@@ -38,8 +38,8 @@ poetry add joint-ml
 fl_client.py
 ```
 
-### Шаг 2: Импортируем Client
-Для создания интерфейса импортируе класс ClientABC: 
+### Шаг 2: Импортируем ClientABC
+Для создания интерфейса импортируем класс ClientABC: 
 ```sh
 from joint_ml import Client
 ```
