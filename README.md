@@ -33,24 +33,24 @@ poetry add joint-ml
 
 
 ### Шаг 1: Создаем модуль
-Создайте python файл, который заканчивется "_client.py" в корневом каталоге вашего git репозитория. Например:
+Создайте python файл, который называется "client.py" в корневом каталоге вашего git репозитория. Например:
 ```sh
 fl_client.py
 ```
 
 ### Шаг 2: Импортируем Client
-Для создания интерфейса импортируе класс Client: 
+Для создания интерфейса импортируе класс ClientABC: 
 ```sh
 from joint_ml import Client
 ```
 
 ### Шаг 3: Создаем класс 
-Создаем класс, наследуемый от абстрактного класса Сlient
+Создаем класс Client, наследуемый от абстрактного класса СlientABC
 ```sh
 from joint_ml import Client
 
 
-class FLClient(Client):
+class Client(ClientABC):
   ...
 ```
 
@@ -60,7 +60,7 @@ class FLClient(Client):
 from joint_ml import Client
 
 
-class FLClient(Client):
+class Client(ClientABC):
     
   def get_weights():
     pass

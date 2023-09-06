@@ -4,17 +4,17 @@ from abc import ABCMeta, abstractmethod
 class Client(metaclass=ABCMeta):
 
     @abstractmethod
-    def get_weights(self):
+    def get_weights(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def set_weights(self):
+    def set_weights(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def train(self):
+    def train(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def test(self):
+    def test(self, *args, **kwargs):
         pass
