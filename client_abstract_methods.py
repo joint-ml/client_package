@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import Union, List
 
 import torch
@@ -6,7 +5,6 @@ import torch
 from metric import Metric
 
 
-@abstractmethod
 def load_model() -> torch.nn.Module:
     """
     Метод для генерации модели. На вход будут подаваться параметры, указанные на сервисе как Init Parameters.
@@ -19,7 +17,6 @@ def load_model() -> torch.nn.Module:
     (nn.Module) - модель.
     """
 
-@abstractmethod
 def get_dataset(dataset_path: str, with_split: bool) -> Union[(torch.utils.data.Dataset, torch.utils.data.Dataset, torch.utils.data.Dataset), (torch.utils.data.Dataset, torch.utils.data.Dataset), (torch.utils.data.Dataset)]:
     """
     Метод для чтения, предобработки и разбития датасета(with_split=True). На вход будут подаваться dataset_path,
@@ -42,7 +39,6 @@ def get_dataset(dataset_path: str, with_split: bool) -> Union[(torch.utils.data.
     (torch.utils.data.Dataset) - возвращается при with_split=False. В будущем используется как test_set(выборка для тестировки модели на весах)
     """
 
-@abstractmethod
 def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set: torch.utils.data.Dataset = None) -> (List[Metric], torch.nn.Module):
     """
     Метод для тренировки модели, полученной из метода load_model. На вход будут подаваться: модель, сгенерированная
@@ -64,7 +60,6 @@ def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set
      2. Обученной модели;
     """
 
-@abstractmethod
 def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_output: bool) -> Union[(List[Metric]), (List[Metric], list)]:
     """
     Метод для тестировки модели на данных. На вход подается model, полученная из load_model; return_output, булева
