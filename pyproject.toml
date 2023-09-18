@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["s.nikishonkov <s.nikishonkov@astondevs.ru>"]
 readme = "README.md"
-packages = [{include = "joint_ml"}]
+packages = [{include = "joint-ml"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
