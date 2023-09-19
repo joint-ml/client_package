@@ -2,7 +2,7 @@ from typing import Union, List
 
 import torch
 
-from metric import Metric
+from _metric import Metric
 
 
 def load_model() -> torch.nn.Module:
