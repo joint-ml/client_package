@@ -25,7 +25,7 @@ _test_fn_not_required_params = {
 }
 
 
-class Client:
+class BaseClient:
     def __init__(
             self, load_model_fn, init_params=None,
             train_params=None,
