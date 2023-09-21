@@ -26,8 +26,10 @@ _test_fn_not_required_params = {
 }
 
 
+WEIGHT_TYPE = BytesIO | str | os.PathLike
+
+
 class Client:
-    WEIGHT_TYPE = BytesIO | str | os.PathLike
 
     def __init__(
             self, load_model_fn, init_params=None,
@@ -191,8 +193,8 @@ def get_fn_parameters(fn, excluded_parameters: list):
     return parameters
 
 
-def save_weights(weights, path):
-    torch.save(weights, path)
+def save_weights(weights, output: WEIGHT_TYPE):
+    torch.save(weights, output)
 
 
 def save_metric(metric, path):
