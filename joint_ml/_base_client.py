@@ -1,3 +1,4 @@
+from io import BytesIO
 import os
 
 from inspect import signature, Parameter
@@ -26,13 +27,15 @@ _test_fn_not_required_params = {
 
 
 class Client:
+    WEIGHT_TYPE = BytesIO | str | os.PathLike
+
     def __init__(
             self, load_model_fn, init_params=None,
             train_params=None,
             train_fn=None,
             test_params=None,
             test_fn=None, get_dataset_fn=None,
-            initial_weights_path=None
+            initial_weight: WEIGHT_TYPE | None = None
     ):
         self.init_params = init_params
         self.train_params = train_params
@@ -62,18 +65,15 @@ class Client:
 
         self.model = self.load_model_fn(**init_params)
 
-        if initial_weights_path is not None:
-            self.set_weights(weights_path=initial_weights_path)
+        self.set_weights(initial_weight)
 
         self.train_set, self.valid_set, self.test_set = None, None, None
         self.device = None
 
-    def set_weights(self, weights=None, weights_path=None):
-        assert weights is not None or weights_path is not None
-        assert not (weights is not None and weights_path is not None)
-        if weights_path:
-            weights = torch.load(weights_path)
-        self.model.load_state_dict(weights)
+    def set_weights(self, weight: WEIGHT_TYPE | None):
+        if weight:
+            weights = torch.load(weight)
+            self.model.load_state_dict(weights)
 
     def get_weights(self):
         return self.model.state_dict()
