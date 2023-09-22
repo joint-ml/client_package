@@ -32,14 +32,17 @@ WEIGHT_TYPE = BytesIO | str | os.PathLike
 class Client:
 
     def __init__(
-            self, load_model_fn, init_params=None,
+            self,
+            load_model_fn,
+            model_params=None,
+            dataset_params=None,
             train_params=None,
             train_fn=None,
             test_params=None,
             test_fn=None, get_dataset_fn=None,
             initial_weight: WEIGHT_TYPE | None = None
     ):
-        self.init_params = init_params
+        self.model_params = model_params
         self.train_params = train_params
         self.test_params = test_params
         self.load_model_fn = load_model_fn
@@ -65,7 +68,7 @@ class Client:
                 [*list(_test_fn_not_required_params.keys()), *list(self.test_params.keys())]
             )
 
-        self.model = self.load_model_fn(**init_params)
+        self.model = self.load_model_fn(**model_params)
 
         self.set_weights(initial_weight)
 
