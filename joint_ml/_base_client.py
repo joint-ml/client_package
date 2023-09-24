@@ -68,7 +68,10 @@ class Client:
                 [*list(_test_fn_not_required_params.keys()), *list(self.test_params.keys())]
             )
 
-        self.model = self.load_model_fn(**model_params)
+        if self.model_params:
+            self.model = self.load_model_fn(**model_params)
+        else:
+            self.model = self.load_model_fn()
 
         self.set_weights(initial_weight)
 
