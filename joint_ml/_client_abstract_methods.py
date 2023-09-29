@@ -1,8 +1,15 @@
-from typing import Union, List, Tuple
+from typing import Union
 
 import torch
 
 from joint_ml._metric import Metric
+
+
+GET_DATASET_RETURN_TYPE = Union[
+    tuple[torch.utils.data.Dataset, torch.utils.data.Dataset, torch.utils.data.Dataset],
+    tuple[torch.utils.data.Dataset, torch.utils.data.Dataset],
+    tuple[torch.utils.data.Dataset],
+]
 
 
 def load_model() -> torch.nn.Module:
@@ -17,9 +24,7 @@ def load_model() -> torch.nn.Module:
     (nn.Module) - модель.
     """
 
-def get_dataset(dataset_path: str, with_split: bool) -> Union[
-    Tuple[torch.utils.data.Dataset, torch.utils.data.Dataset, torch.utils.data.Dataset], Tuple[
-    torch.utils.data.Dataset, torch.utils.data.Dataset], Tuple[torch.utils.data.Dataset]]:
+def get_dataset(dataset_path: str, with_split: bool) -> GET_DATASET_RETURN_TYPE:
     """
     Метод для чтения, предобработки и разбития датасета(with_split=True). На вход будут подаваться dataset_path,
      with_split, параметры, которые разработчик ML указывает на сайте в разделе Dataset Parameters, а также параметры,
@@ -44,7 +49,7 @@ def get_dataset(dataset_path: str, with_split: bool) -> Union[
     (torch.utils.data.Dataset) - возвращается при with_split=False. В будущем используется как test_set(выборка для тестировки модели на весах)
     """
 
-def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set: torch.utils.data.Dataset = None) -> (List[Metric], torch.nn.Module):
+def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set: torch.utils.data.Dataset = None) -> tuple[list[Metric], torch.nn.Module]:
     """
     Метод для тренировки модели, полученной из метода load_model. На вход будут подаваться: модель, сгенерированная
      методом load_model, train_set полученный из метода get_dataset, valid_set(опционально) полученный из
@@ -67,7 +72,7 @@ def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set
      2. Обученной модели;
     """
 
-def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_output: bool) -> Union[List[Metric], Tuple[List[Metric], list]]:
+def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_output: bool) -> tuple[list[Metric]] | tuple[list[Metric], list]:
     """
     Метод для тестировки модели на данных. На вход подается model, полученная из load_model; return_output, булева
     переменная говорящая о необходимости возврата выхода из модели на данных; test_set - тестировочная выборка
