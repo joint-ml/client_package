@@ -23,7 +23,6 @@ _test_fn_not_required_params = {
 
 
 class Client:
-
     def __init__(self,
                  load_model_fn,
                  model_global_parameters=None,
@@ -160,10 +159,8 @@ class Client:
             save_output(output_folder=self.output_folder, metrics=eval_metrics, eval_output=eval_output)
         else:
             save_output(output_folder=self.output_folder, metrics=eval_metrics)
-<<<<<<< Updated upstream
-=======
 
 
 def save_weights(weights, path):
     torch.save(weights, path)
->>>>>>> Stashed changes
+
