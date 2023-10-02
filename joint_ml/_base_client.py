@@ -160,3 +160,10 @@ class Client:
             save_output(output_folder=self.output_folder, metrics=eval_metrics, eval_output=eval_output)
         else:
             save_output(output_folder=self.output_folder, metrics=eval_metrics)
+<<<<<<< Updated upstream
+=======
+
+
+def save_weights(weights, path):
+    torch.save(weights, path)
+>>>>>>> Stashed changes
