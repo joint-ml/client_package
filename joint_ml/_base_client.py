@@ -1,7 +1,10 @@
+from typing import Union, List, Tuple
+
 import torch
 from torch import nn
 import torch.utils.data
 
+from joint_ml._metric import Metric
 from joint_ml._utils import get_fn_parameters, save_output
 from joint_ml._typing import WEIGHTS_TYPE
 
@@ -128,7 +131,7 @@ class Client:
 
         save_output(output_folder=self.output_folder, weights=trained_weights, metrics=metrics, additional_data=fit_additional_data)
 
-    def evaluate(self, **kwargs):
+    def evaluate(self, return_output=False, **kwargs) -> tuple[list[Metric]] | tuple[list[Metric], list]:
         get_dataset_user_parameters = {}
         test_user_parameters = {}
 
@@ -146,19 +149,14 @@ class Client:
 
         assert eval_set is not None
 
-        eval_metrics, eval_output = None, None
-
-        if 'return_output' in kwargs:
+        if return_output:
             eval_metrics, eval_output = self.test_fn(model=self.model, test_set=eval_set, return_output=True,
                                                      **self.test_global_parameters, **test_user_parameters)
+            return eval_metrics, eval_output
         else:
             eval_metrics = self.test_fn(model=self.model, test_set=eval_set, return_output=False,
                                         **self.test_global_parameters, **test_user_parameters)
-
-        if eval_output:
-            save_output(output_folder=self.output_folder, metrics=eval_metrics, eval_output=eval_output)
-        else:
-            save_output(output_folder=self.output_folder, metrics=eval_metrics)
+            return eval_metrics
 
 
 def save_weights(weights, path):
