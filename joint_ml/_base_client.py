@@ -24,6 +24,10 @@ _test_fn_not_required_params = {
     'return_output': bool
 }
 
+_get_prediction_fn_not_required_params = {
+    'model': nn.Module
+}
+
 
 class Client:
     def __init__(self,
@@ -35,6 +39,7 @@ class Client:
                  train_fn=None,
                  test_fn=None,
                  get_dataset_fn=None,
+                 get_prediction_fn=None,
                  initial_weights_path=None,
                  output_folder=None):
 
@@ -47,6 +52,7 @@ class Client:
         self.get_dataset_fn = get_dataset_fn
         self.train_fn = train_fn
         self.test_fn = test_fn
+        self.get_prediction_fn = get_prediction_fn
 
         self.output_folder = output_folder
 
@@ -65,6 +71,10 @@ class Client:
             self.test_user_required_parameters = get_fn_parameters(test_fn,
                                                                    [*list(_test_fn_not_required_params.keys()),
                                                                     *list(self.test_global_parameters.keys())])
+
+        if self.get_prediction_fn:
+            self.get_prediction_user_required_parameters = get_fn_parameters(get_prediction_fn,
+                                                                             [*list(_get_prediction_fn_not_required_params.keys())])
 
         self.model = self.load_model_fn(
             **self.model_global_parameters) if self.model_global_parameters else self.load_model_fn()
@@ -131,33 +141,19 @@ class Client:
 
         save_output(output_folder=self.output_folder, weights=trained_weights, metrics=metrics, additional_data=fit_additional_data)
 
-    def evaluate(self, return_output=False, **kwargs) -> tuple[list[Metric]] | tuple[list[Metric], list]:
-        get_dataset_user_parameters = {}
-        test_user_parameters = {}
+    def predict(self, **kwargs) -> list | tuple[list[Metric], list]:
+        get_prediction_user_parameters = {}
 
         for arg, val in kwargs.items():
-            if arg in [param['name'] for param in self.get_dataset_user_required_parameters]:
-                get_dataset_user_parameters[arg] = val
-            elif arg in [param['name'] for param in self.test_user_required_parameters]:
-                test_user_parameters[arg] = val
+            if arg in [param['name'] for param in self.get_prediction_user_required_parameters]:
+                get_prediction_user_parameters[arg] = val
 
-        eval_set = self.test_set
+        if self.device is None:
+            self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        if 'dataset_path' in get_dataset_user_parameters:
-            eval_set = self.get_dataset_fn(with_split=False, **self.dataset_global_parameters,
-                                           **get_dataset_user_parameters)
+        output = self.get_prediction_fn(model=self.model, **get_prediction_user_parameters)
 
-        assert eval_set is not None
-
-        if return_output:
-            eval_metrics, eval_output = self.test_fn(model=self.model, test_set=eval_set, return_output=True,
-                                                     **self.test_global_parameters, **test_user_parameters)
-            return eval_metrics, eval_output
-        else:
-            eval_metrics = self.test_fn(model=self.model, test_set=eval_set, return_output=False,
-                                        **self.test_global_parameters, **test_user_parameters)
-            return eval_metrics
-
+        return output
 
 def save_weights(weights, path):
     torch.save(weights, path)

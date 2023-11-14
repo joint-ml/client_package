@@ -72,10 +72,9 @@ def train(model: torch.nn.Module, train_set: torch.utils.data.Dataset, valid_set
      2. Обученной модели;
     """
 
-def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_output: bool) -> tuple[list[Metric]] | tuple[list[Metric], list]:
+def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset) -> tuple[list[Metric]] | tuple[list[Metric], list]:
     """
-    Метод для тестировки модели на данных. На вход подается model, полученная из load_model; return_output, булева
-    переменная говорящая о необходимости возврата выхода из модели на данных; test_set - тестировочная выборка
+    Метод для тестировки модели на данных. На вход подается model, полученная из load_model; test_set - тестировочная выборка
     полученная из get_dataset, параметры, которые разработчик ML указывает на сайте в разделе Test Parameters, а также
      параметры, которые разработчик ML укажет в коде как необходимые(специфические для каждого отдельного пользователя)
 
@@ -83,7 +82,6 @@ def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_out
     Обязательные параметры, которые необходимо учитывать разработчику ML:
     model(nn.Module) - модель, полученный из метода load_model
     test_set(torch.utils.data.Dataset) - тестировочная выборка, полученная из метода get_dataset
-    return_output(bool) - булева переменная, говорящая о необходимости возвращать ответы модели
     **test_global_parameters - параметры, которые разработчик ML указывает на сайте в разделе Test Parameters
     **test_user_parameters - параметры тестировки, специфические для каждого пользователя
 
@@ -91,4 +89,20 @@ def test(model: torch.nn.Module,  test_set: torch.utils.data.Dataset, return_out
     Возвращает один из следующих кортежей:
     (List[Metric]) - метрики полученные в ходе тестировки модели на данных
     (List[Metric], list) - метрики и ответы модели полученные в ходе тестировки модели на данных(только если return_output=True)
+    """
+
+
+def get_prediction(model: torch.nn.Module, dataset_path: str) -> list:
+    """
+    Метод для получения предсказаний модели на данных пользователя. На вход подается model, полученная из load_model;
+    dataset_path - путь до csv-файла с датасетом; параметры, которые разработчик ML укажет в коде
+    как необходимые(специфические для каждого отдельного пользователя)
+
+    Обязательные параметры, которые необходимо учитывать разработчику ML:
+    model(nn.Module) - модель, полученный из метода load_model
+    dataset_path(str) - путь до csv-файла с датасетом
+    **get_prediction - параметры для получения предсказаний, специфические для каждого пользователя
+
+    :return:
+    list - ответы модели на данных пользователя
     """
